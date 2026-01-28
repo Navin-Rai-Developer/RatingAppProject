@@ -17,22 +17,25 @@ import SwiftUI
 ///                             maxRating: 3,
 ///                             currentRating: $heartRating,
 ///                             width: 50,
-///                             symbol: "heart",
+///                             symbolEnum: "heart",
 ///                             color: .red)
 ///                             
 struct RatingView: View {
     let maxRating: Int
     @Binding var currentRating: Int
     let width: Int
-    let symbol: String
+    let symbol: String?
+    let symbolEnum: Symbol?
     let color: Color
+    var symbolString: String
     
-    ///Only two required parameters are maxRating and the binding to currentRataing. All other parameters have default values
+    
+    /// Only two required parameters are maxRating and the binding to currentRataing. All other parameters have default values
     /// -Parameters:
     ///   - maxRating: The maximum rating on the scale
     ///   - currentRating: A binding to the current rating variable
     ///   - width: The width to the image used for the rating (Default - 20)
-    ///   - symbol: A string representing an SFImage that has a slash and fill varient(Default - "star")
+    ///   - symbol:  A string representing an SFImage(Default - "star")
     ///   - color: The color of the Image (Dafault - .yellow)
     ///
     ///
@@ -40,18 +43,21 @@ struct RatingView: View {
         maxRating: Int,
         currentRating: Binding <Int>,
         width: Int = 30,
-        symbol: String = "star",
+        symbol: String? = "star",
         color: Color = .yellow
     ) {
         self.maxRating = maxRating
         self._currentRating = currentRating
         self.width = width
         self.symbol = symbol
+        self.symbolEnum = nil
         self.color = color
+        
+        symbolString = if let symbolEnum { symbolEnum.rawValue } else { symbol! }
     }
     var body: some View {
         HStack {
-            Image(systemName: symbol)
+            Image(systemName: "x.circle")
                 .resizable()
                 .scaledToFit()
                 .foregroundStyle(color)
@@ -64,7 +70,7 @@ struct RatingView: View {
                 }
             ForEach(0..<maxRating, id: \.self) {
                 rating in
-                Image(systemName: symbol)
+                Image(systemName: symbolString)
                     .resizable()
                     .scaledToFit()
                     .foregroundStyle(color)
@@ -89,4 +95,47 @@ struct RatingView: View {
         }
     }
     return PreviewWrapper()
+}
+
+extension RatingView {
+    /// Only two required parameters are maxRating and the binding to currentRataing. All other parameters have default values
+    /// -Parameters:
+    ///   - maxRating: The maximum rating on the scale
+    ///   - currentRating: A binding to the current rating variable
+    ///   - width: The width to the image used for the rating (Default - 20)
+    ///   - symbol:  A selection of SFSymbol
+    ///   - color: The color of the Image (Dafault - .yellow)
+    ///
+    ///
+    init(
+        maxRating: Int,
+        currentRating: Binding<Int>,
+        width: Int = 30,
+        symbolEnum: Symbol?,
+        color: Color = .yellow
+    ) {
+        self.maxRating = maxRating
+        self._currentRating = currentRating
+        self.width = width
+        self.symbol = nil
+        self.symbolEnum = symbolEnum
+        self.color = color
+        
+        symbolString = if let symbolEnum { symbolEnum.rawValue } else { symbol! }
+    }
+}
+
+enum Symbol: String {
+    case bell
+    case bookmark
+    case diamond
+    case eye
+    case flag
+    case heart
+    case pencil
+    case pin
+    case star
+    case thumbsUp = "hand.thumbsup"
+    case tag
+    case trash
 }

@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var heartRating = 0
     @State private var pinRating = 0
     @State private var tagRating = 0
+    @State private var bookmarkRating = 0
     var body: some View {
         RatingView(
             maxRating: 5,
@@ -32,7 +33,17 @@ struct ContentView: View {
             symbol: "pin",
             color: .blue
         )
-        RatingView(maxRating: 5, currentRating: $tagRating, symbol: "tag")
+        RatingView(
+            maxRating: 5,
+            currentRating: $bookmarkRating,
+            symbolEnum: .bookmark,
+            color: .teal
+        )
+        RatingView(
+            maxRating: 5,
+            currentRating: $tagRating,
+            symbol: "tag"
+        )
         
     }
 }
@@ -40,3 +51,4 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
